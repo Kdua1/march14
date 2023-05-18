@@ -20,22 +20,21 @@ jobs:
           aws-region: us-east-1
 
       - name: Login to Amazon ECR
-        id: login-ecr
+        id: login-pf-aws-ecr
         uses: aws-actions/amazon-ecr-login@62f4f872db3836360b72999f4b87f1ff13310f3a
 
       - name: Build, tag, and push image to Amazon ECR
-        id: build-image
+        
         env:
-          ECR_REGISTRY: ${{ secrets.REGISTRY }}
+          ECR_REGISTRY: ${{ secrets.REGISTRY }}   # 546752724724.dkr.ecr.us-east-1.amazonaws.com/ecr-flower
           ECR_REPOSITORY: ${{ secrets.REPO_NAME }}
           IMAGE_TAG: latest
+
         run: |
-          # Build a docker container and
-          # push it to ECR so that it can
-          # be deployed to ECS.
+          
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          
 
          
       - name: Set up QEMU
@@ -55,5 +54,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: user/app:latest
+          tags: kdua1/app:latest
        
